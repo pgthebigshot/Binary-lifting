@@ -1,0 +1,40 @@
+class TreeAncestor {
+    
+    static int log=0;
+    static int up[][];
+    static int depth[];
+    public TreeAncestor(int n, int[] parent) {
+        
+        while(1<<log<=n)
+            log++;
+        up=new int[n][log];
+        depth=new int[n];
+        parent[0]=0;
+        for(int v=0;v<n;v++)
+        {
+            up[v][0]=parent[v];
+            if(v!=0)
+            depth[v]=depth[parent[v]]+1;
+            for(int j=1;j<log;j++)
+                up[v][j]=up[up[v][j-1]][j-1];
+        }
+    }
+    
+    public int getKthAncestor(int node, int k) {
+        if(depth[node]<k)
+            return -1;
+        // for(int j=log-1;j>=0;j--)
+        //     if(k>=1<<j)
+        //     {
+        //         node=up[node][j];
+        //         k-=1<<j;
+        //     }
+        for(int j=0;j<log;j++)
+            if((k & (1<<j))==(1<<j))
+            {
+                // System.out.println(k+" "+(1<<j)+" "+(k & (1<<j)));
+                node=up[node][j];
+            }
+        return node;
+    }
+}
